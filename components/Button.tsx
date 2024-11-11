@@ -12,6 +12,7 @@ type Props = {
 	buttonStyles?: ViewStyle;
 	onPress: () => void;
 	outerStyles?: StyleProp<ViewStyle>;
+	disabled?: boolean;
 };
 
 const Button: FC<Props> = ({
@@ -19,10 +20,16 @@ const Button: FC<Props> = ({
 	onPress,
 	buttonStyles,
 	outerStyles,
+	disabled = false,
 }) => {
 	return (
 		<TouchableOpacity
-			style={[styles.button, buttonStyles, outerStyles]}
+			style={[
+				styles.button,
+				buttonStyles,
+				outerStyles,
+				disabled && styles.disabledButton,
+			]}
 			onPress={onPress}
 		>
 			{children}
@@ -38,6 +45,9 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 		paddingBottom: 16,
 		paddingTop: 16,
+	},
+	disabledButton: {
+		backgroundColor: "#F6F6F6",
 	},
 });
 

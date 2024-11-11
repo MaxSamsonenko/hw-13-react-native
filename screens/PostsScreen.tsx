@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	StyleSheet,
 	View,
@@ -9,23 +9,30 @@ import {
 } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native";
 
-import { comments, Post } from "./comments";
+// import { comments, Post } from "./comments";
 import PostCard from "../components/PostCard";
 
-type RootStackParamList = {
-	Posts: {
-		username: string;
-		email: string;
-	};
-};
+// type RootStackParamList = {
+// 	Posts: {
+// 		username: string;
+// 		email: string;
+// 	};
+// };
 
 const PostsScreen: React.FC = () => {
-	const [posts, setPosts] = useState<Post[]>(comments);
 	const route = useRoute<RouteProp<RootStackParamList, "Posts">>();
-	const { username, email } = route.params || {};
+	console.log(route);
+	const { from, data } = route.params || {};
+	console.log("from: ", from, "data: ", data);
+	const [posts, setPosts] = useState([]);
 
-	console.log("in posts screen", posts);
+	useEffect(() => {
+		if (from === "CreatePosts" && data) {
+			setPosts((prevPosts) => [...prevPosts, data]);
+		}
+	}, [from, data]);
 
+	console.log(posts);
 	return (
 		<View style={styles.mainContainer}>
 			<View style={styles.avatarNameWrapper}>
@@ -37,15 +44,17 @@ const PostsScreen: React.FC = () => {
 					/>
 				</View>
 				<View>
-					<Text style={styles.nameText}>{username}</Text>
-					<Text style={styles.emailText}>{email}</Text>
+					<Text style={styles.nameText}>{data?.username}</Text>
+					<Text style={styles.emailText}>{data?.email}</Text>
 				</View>
 			</View>
 			<SafeAreaView style={styles.container}>
 				<ScrollView>
-					{posts.map((post) => (
-						<PostCard post={post} key={post.id} />
-					))}
+					{posts.length === 0 ? (
+						<Text> There are no posts to view</Text>
+					) : (
+						posts.map((post) => <PostCard post={post} key={post.id} />)
+					)}
 				</ScrollView>
 			</SafeAreaView>
 		</View>

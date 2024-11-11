@@ -11,47 +11,51 @@ import SendBtnSvg from "../components/Svg/SendBtnSvg";
 
 const CommentsScreen: React.FC = () => {
 	const route = useRoute();
-	console.log(route);
+
 	const { post } = route.params || {};
 	console.log("in comments", post);
 	return (
 		<View style={styles.container}>
 			<View style={styles.imageContainer}>
 				<Image
+					source={{ uri: post["photo"] }}
 					style={styles.image}
-					source={require("../assets/images/sunset2.png")}
 					resizeMode="cover"
 				/>
 			</View>
 			<View style={styles.commentsContainer}>
 				<ScrollView>
 					<View style={styles.commentContainer}>
-						{post.comments.map((comment) => (
-							<View
-								key={comment.id}
-								style={[
-									styles.commentContainer,
-									comment.own ? styles.rowReverse : styles.row,
-								]}
-							>
-								<View style={styles.avatarContainer}>
-									<Image
-										style={styles.avatar}
-										source={require("../assets/images/avatar1.png")}
-										resizeMode="cover"
-									/>
-								</View>
+						{post?.comments ? (
+							post.comments.map((comment) => (
 								<View
+									key={comment.id}
 									style={[
-										styles.textContainer,
-										comment.own ? styles.myComment : styles.comment,
+										styles.commentContainer,
+										comment.own ? styles.rowReverse : styles.row,
 									]}
 								>
-									<Text style={styles.text}>{comment.comment}</Text>
-									<Text style={styles.date}>{comment.datePosted}</Text>
+									<View style={styles.avatarContainer}>
+										<Image
+											style={styles.avatar}
+											source={require("../assets/images/avatar1.png")}
+											resizeMode="cover"
+										/>
+									</View>
+									<View
+										style={[
+											styles.textContainer,
+											comment.own ? styles.myComment : styles.comment,
+										]}
+									>
+										<Text style={styles.text}>{comment.comment}</Text>
+										<Text style={styles.date}>{comment.datePosted}</Text>
+									</View>
 								</View>
-							</View>
-						))}
+							))
+						) : (
+							<Text>No Comments Yet</Text>
+						)}
 					</View>
 				</ScrollView>
 			</View>
@@ -81,6 +85,7 @@ const styles = StyleSheet.create({
 	imageContainer: {},
 	image: {
 		width: "100%",
+		height: 240,
 		borderRadius: 8,
 	},
 	commentsContainer: { flex: 1 },

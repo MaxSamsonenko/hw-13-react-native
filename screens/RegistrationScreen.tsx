@@ -17,37 +17,34 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import AddBtnSvg from "../components/Svg/AddBtnSvg";
 
-type RootStackParamList = {
-	Home: {
-		screen: "HomeTabs";
-		params: {
-			screen: "Posts" | "CreatePosts" | "Profile";
-			params: {
-				username: string;
-				email: string;
-			};
-		};
-	};
-	Login: undefined;
-};
-type NavigationProps = StackNavigationProp<RootStackParamList>;
+// type RootStackParamList = {
+// 	Home: {
+// 		screen: "HomeTabs";
+// 		params: {
+// 			screen: "Posts" | "CreatePosts" | "Profile";
+// 			params: {
+// 				username: string;
+// 				email: string;
+// 			};
+// 		};
+// 	};
+// 	Login: undefined;
+// };
+// type NavigationProps = StackNavigationProp<RootStackParamList>;
 
 const RegistrationScreen: React.FC = () => {
-	const navigation = useNavigation<NavigationProps>();
+	const navigation = useNavigation();
 	const [username, setUsername] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
 	const onRegister = () => {
-		console.log(
-			`Username: ${username}, Email: ${email}, password: ${password}`
-		);
 		navigation.navigate("Home", {
 			screen: "HomeTabs",
 			params: {
 				screen: "Posts",
-				params: { username, email },
+				params: { from: "Register", data: { username, email } },
 			},
 		});
 

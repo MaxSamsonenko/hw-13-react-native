@@ -4,45 +4,42 @@ import { useNavigation } from "@react-navigation/native";
 import MessageSvg from "./Svg/MessageSvg";
 import MapPinSvg from "./Svg/MapPinSvg";
 
-import { Post } from "../screens/comments";
-
-const imageMap: { [key: string]: any } = {
-	"../assets/images/landscape-post.png": require("../assets/images/landscape-post.png"),
-	"../assets/images/sunset-post.png": require("../assets/images/sunset-post.png"),
-	"../assets/images/venice-house-post.png": require("../assets/images/venice-house-post.png"),
-};
-
-type PostCardProps = {
-	post: Post;
-};
-
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC = ({ post }) => {
 	const navigation = useNavigation();
 
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity
-				onPress={() => navigation.navigate("Comments", { post: post })}
-			>
-				<View style={styles.imgWrapper}>
-					<Image
-						source={imageMap[post.thumb]}
-						style={[StyleSheet.absoluteFillObject, styles.image]}
-						resizeMode="cover"
-					/>
-				</View>
-				<Text>{post.title}</Text>
-				<View style={styles.commsMapWrapper}>
-					<View style={styles.commsWrapper}>
+			<View style={styles.imgWrapper}>
+				<Image
+					source={{ uri: post.photo }}
+					style={[StyleSheet.absoluteFillObject, styles.image]}
+					resizeMode="cover"
+				/>
+			</View>
+			<Text>{post.name}</Text>
+			<View style={styles.commsMapWrapper}>
+				<View style={styles.commsWrapper}>
+					<TouchableOpacity
+						onPress={() => navigation.navigate("Comments", { post: post })}
+					>
 						<MessageSvg />
-						<Text>{post.commentsCount}</Text>
-					</View>
-					<View style={styles.mapWrapper}>
-						<MapPinSvg />
-						<Text>{post.location}</Text>
-					</View>
+					</TouchableOpacity>
+
+					<Text>{post?.commentsCount}</Text>
 				</View>
-			</TouchableOpacity>
+				<View style={styles.mapWrapper}>
+					<TouchableOpacity
+						onPress={() =>
+							navigation.navigate("Map", {
+								post: post,
+							})
+						}
+					>
+						<MapPinSvg />
+					</TouchableOpacity>
+					<Text>{post.address}</Text>
+				</View>
+			</View>
 		</View>
 	);
 };
